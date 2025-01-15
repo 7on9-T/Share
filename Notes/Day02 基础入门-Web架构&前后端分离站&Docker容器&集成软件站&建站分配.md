@@ -140,9 +140,9 @@ chmod -R 777 /var/www/html/zblog
 
 Linux下终端全局代理
 -
-把代理服务器地址写入shell配置文件.bashrc或者.zshrc 直接在.bashrc或者.zshrc添加下面内容export 
+把代理服务器地址写入shell配置文件.bashrc或者.zshrc 直接在.bashrc或者.zshrc添加下面内容
 ```bash
-http_proxy="http://localhost:port"  
+export http_proxy="http://localhost:port"  
 export https_proxy="http://localhost:port" 
 ```
 在Fedora上部署docker
