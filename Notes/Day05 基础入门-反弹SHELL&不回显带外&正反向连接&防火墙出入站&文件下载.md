@@ -84,28 +84,29 @@ Windows主动给出
 Linux	可用
 Windows	可用	不可用
 
-1.	| （管道符号）
+### 1.	| （管道符号）
 例如，使用管道可以将文件内容通过`cat`命令输出，并通过`grep`命令进行筛选：
 cat file.txt | grep "keyword"
 https://blog.csdn.net/zhangkunls/article/details/143167921
-2.	||（逻辑或）
+### 2.	||（逻辑或）
 command1 || command2
 如果 command1 执行失败（返回一个非零状态码），则 command2 会被执行。如果 command1 执行成功（返回零状态码），则 command2 不会被执行。
-3.	&&（逻辑与）
+### 3.	&&（逻辑与）
 https://blog.csdn.net/dessler/article/details/142343304
-4.	&（后台任务）
+### 4.	&（后台任务）
 在Linux中，当你在命令的末尾添加“&”时，该命令会在后台运行，这样你就可以继续在同一个终端上进行其他操作，而不会因为该命令的执行而被阻塞。
-5.	；
+### 5.	；
 Linux系统中的分号（;）用于在命令行中分隔多个命令，使得这些命令可以顺序执行。
-6.	``
+### 6.	``
 ``中的内容执行后替换
 
-实战：
-Windows Server 部署Pikachu漏洞练习平台，打开RCE-exec“ping”
-1、	下载源码
-2、	添加网站并上传源码
-3、	找到Pikachu漏洞练习平台中的RCE-exec“ping”
-4、	利用符号进行漏洞利用
+实战
+-
+Windows Server 部署Pikachu漏洞练习平台，打开RCE-exec“ping”  
+1、	下载源码  
+2、	添加网站并上传源码  
+3、	找到Pikachu漏洞练习平台中的RCE-exec“ping”  
+4、	利用符号进行漏洞利用  
 
 关键词：防火墙的出站和入站限制
 
