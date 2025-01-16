@@ -1,22 +1,27 @@
 Day09 基础入门-算法逆向&散列对称非对称&JS源码逆向&AES&DES&RSA&SHA
+=
 安全测试中：
 密文-有源码直接看源码分析算法（后端必须要有源码才能彻底知道）
 密文-没有源码1、猜识别 2、看前端JS（加密逻辑是不是在前端）
 #算法加密-概念&分类&类型
-1. 单向散列加密 -MD5 
+
+1.单向散列加密 -MD5 
+-
 单向散列加密算法的优点有(以MD5为例)：
 方便存储，损耗低：加密/加密对于性能的损耗微乎其微。
 单向散列加密的缺点就是存在暴力破解的可能性，最好通过加盐值的方式提高安全性，此外可能存在散列冲突。我们都知道MD5加密也是可以破解的。
 常见的单向散列加密算法有：
 MD5 SHA MAC CRC
 
-2. 对称加密 -AES
+2.对称加密 -AES
+-
 对称加密优点是算法公开、计算量小、加密速度快、加密效率高。
 缺点是发送方和接收方必须商定好密钥，然后使双方都能保存好密钥，密钥管理成为双方的负担。
 常见的对称加密算法有：
 DES AES RC4
 
-3. 非对称加密 -RSA
+3.非对称加密 -RSA
+-
 非对称加密的优点是与对称加密相比，安全性更好，加解密需要不同的密钥，公钥和私钥都可进行相互的加解密。
 缺点是加密和解密花费时间长、速度慢，只适合对少量数据进行加密。
 常见的非对称加密算法：
@@ -93,12 +98,13 @@ if (password_verify('123456', $hash)) {
 
 2、数据通讯
 -博客登录-zblog（前端处理）
+```html
 <script src="script/md5.js" type="text/javascript"></script>
 $("#btnPost").click(function(){
     var strPassWord=$("#edtPassWord").val();
     $("form").attr("action","cmd.php?act=verify");
     $("#password").val(MD5(strPassWord));
-
+```
 -墨者靶场-（后端处理）
 -1 union select 1,database(),user(),4_mozhe
 xgd58ipTrnx8VzSBJicqCibZxIRsZKgXOYUrNQP8fCCtx9JZ+6K1hHt7RKkzV305
