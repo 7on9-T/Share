@@ -145,7 +145,7 @@ Linux下终端全局代理
 -
 >把代理服务器地址写入shell配置文件.bashrc或者.zshrc
 ```bash
-http_proxy="http://localhost:port"  
+export http_proxy="http://localhost:port"  
 export https_proxy="http://localhost:port" 
 ```
 在Fedora上部署docker
