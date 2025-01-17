@@ -80,9 +80,9 @@ Windows主动给出
 
 特殊符号
 -
-	|	||	&	&&	；	``
-Linux	可用
-Windows	可用	不可用
+    Linux	            可用    |	||	&	&&	 ；	``
+    Windows-cmd	        可用	|	||	&	&&        不可用 ；	``
+    Windows-powershell	可用	|	||	&	&&   ；   不可用 ``
 
 ### 1.	| （管道符号）
 例如，使用管道可以将文件内容通过`cat`命令输出，并通过`grep`命令进行筛选：
