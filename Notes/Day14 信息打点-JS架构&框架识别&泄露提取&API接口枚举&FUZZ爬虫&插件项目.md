@@ -125,3 +125,18 @@ https://github.com/p1g3/JSINFO-SCAN
 ## FindSomething
 https://github.com/momosecurity/FindSomething  
 该工具是用于快速在网页的html源码或js代码中提取一些有趣的信息的浏览器插件,包括请求的资源，接口的url，请求的ip和域名，泄露的证件号，手机号，邮箱等信息
+
+
+
+## ffuf 
+找到更多的js文件分析更多的信息  
+https://github.com/ffuf/ffuf  
+https://wordlists.assetnote.io  
+功能强大的模糊化工具，用它来FUZZ模糊化js文件。
+
+
+## Packer-Fuzzer
+针对JS框架开发打包器Webpack检测  
+https://github.com/rtcatc/Packer-Fuzzer  
+一款针对webpack等前端打包工具所构造的网站进行快速、高效安全检测的扫描工具
+
