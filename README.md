@@ -17,6 +17,10 @@
 -
 位于<https://github.com/7on9-T/Share/tree/main/Notes>下，别再跟我说找不到了。
 
+工具
+-
+位于<https://github.com/7on9-T/Share/tree/main/Apps>下。
+
 渗透测试工具环境推荐
 =
 One-Fox工具箱
