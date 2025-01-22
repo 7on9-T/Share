@@ -178,5 +178,5 @@ MIME处理类型
 -
 正常思路：URL和文件目录对应上  
 路由访问：MVC架构源码 java python  
-<https://blog.csdn.net/2301_79518550/article/details/144486247>(这个了解就行)
+<https://blog.csdn.net/2301_79518550/article/details/144486247>(这个了解就行)  
 URL和文件目录对应不上 要根据配置路由决定
