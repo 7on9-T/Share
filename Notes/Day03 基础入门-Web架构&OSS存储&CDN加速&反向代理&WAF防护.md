@@ -8,8 +8,7 @@ Day03 基础入门-Web架构&OSS存储&CDN加速&反向代理&WAF防护
 演示：IIS下免费D盾防护软件https://www.d99net.net/  
 ### 模拟
 Windows Server 2022 + IIS + D盾  
-先安装D盾  
-尝试上传后门  
+尝试上传后门1.asp  
 打开后门时会被D盾防护阻止（安全测试手法会被拦截）  
 
 ### WAF分类  
