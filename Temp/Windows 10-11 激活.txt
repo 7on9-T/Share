@@ -1,2 +1,0 @@
-Windows 10-11 激活密钥获取器
-irm https://get.activated.win | iex
