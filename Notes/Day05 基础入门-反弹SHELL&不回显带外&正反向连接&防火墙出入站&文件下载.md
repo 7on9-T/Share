@@ -108,7 +108,75 @@ Windows Server 部署Pikachu漏洞练习平台，打开RCE-exec“ping”
 3、	找到Pikachu漏洞练习平台中的RCE-exec“ping”  
 4、	利用符号进行漏洞利用  
 
-关键词：防火墙的出站和入站限制
+防火墙的出站和入站限制
+-
+<i>Windows 防火墙是 Windows 用于监控和控制进出计算机的网络流量的安全工具。通过配置防火墙策略，可以有效保护系统免受网络攻击和未经授权的访问。</i>
+
+### Windows 防火墙的基本功能
+    入站规则：控制外部网络对计算机的访问。
+    出站规则：控制计算机访问外部网络的行为。
+    网络类型配置：根据网络环境（公共、专用、域）设置不同的防火墙规则。
+    应用程序控制：允许或阻止特定应用程序的网络访问。
+
+### 配置防火墙策略的方法
+#### 使用图形界面（GUI）
+1.	打开 控制面板 > 系统和安全 > Windows Defender 防火墙。
+2.	在左侧菜单中，选择 高级设置，进入 高级安全 Windows Defender 防火墙。
+3.	在这里可以配置
+     入站规则：管理外部访问本机的规则。  
+     出站规则：管理本机访问外部的规则。  
+     连接安全规则：配置 IPsec 规则，用于加密网络通信。  
+     监视：查看当前生效的规则和连接。  
+#### 使用命令行工具（netsh） 
+通过 netsh 命令可以快速配置防火墙策略。  
+查看当前防火墙配置   
+```cmd
+netsh advfirewall show allprofiles  
+```
+启用或禁用防火墙  
+```cmd
+netsh advfirewall set allprofiles state on  
+netsh advfirewall set allprofiles state off  
+```
+添加入站规则  
+```
+netsh advfirewall firewall add rule name="Allow HTTP" dir=in action=allow protocol=TCP localport=80  
+```
+#### 使用 PowerShell
+PowerShell 提供了更强大的管理功能。例如：
+查看所有防火墙规则：
+```powershell
+Get-NetFirewallRule
+```
+创建新的入站规则：
+```powershell
+New-NetFirewallRule -DisplayName "Allow SSH" -Direction Inbound -Protocol TCP -LocalPort 22 -Action Allow
+```
+
+#### Windows对于防火墙的策略
+1.	默认阻止所有入站流量：除非明确允许，否则阻止所有外部访问。
+2.	允许必要的出站流量：限制出站流量，防止恶意软件外传数据。
+3.	按网络类型配置：
+>公共网络：使用最严格的规则。  
+专用网络：适当放宽规则，方便内部通信。  
+域网络：根据域策略配置。
+
+4. 常见防火墙策略示例
+允许特定端口的入站流量：
+允许 HTTP（端口 80）和 HTTPS（端口 443）流量：
+```cmd
+netsh advfirewall firewall add rule name="Allow HTTP" dir=in action=allow protocol=TCP localport=80
+netsh advfirewall firewall add rule name="Allow HTTPS" dir=in action=allow protocol=TCP localport=443
+```
+阻止特定 IP 地址的访问：
+```cmd
+netsh advfirewall firewall add rule name="Block IP" dir=in action=block remoteip=192.168.1.100
+```
+允许特定应用程序的出站流量：
+```powershell
+New-NetFirewallRule -DisplayName "Allow Chrome" -Direction Outbound -Program "C:\Program Files\Google\Chrome\Application\chrome.exe" -Action Allow
+```
+
 
 存在漏洞，但是数据不回显：  
 1、	反弹shell  
