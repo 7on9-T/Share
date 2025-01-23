@@ -1,9 +1,6 @@
 Day11 基础入门-ChatGPT篇&注册体验&结合安全&融入技术&高效赋能&拓展需求
 =
 
-Chatgpt大概科普  
--
-
 ChatGPT是什么?    
 -
 GPT 的英文原文是 Generative Pre-training Transformer（预训练生成模型），业界有人将 ChatGPT 概括为聊天机器人+搜索工具+文本创造工具的组合，或者简单理解它是一个生成式 AI（内容生成器）。  
