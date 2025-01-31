@@ -1,12 +1,12 @@
 Day03 基础入门-Web架构&OSS存储&CDN加速&反向代理&WAF防护
 =
-#WAF：Web Application Firewall   Web应用防火墙
+WAF：Web Application Firewall   Web应用防火墙
 -
 ### 原理
 一种专门用于保护 Web 应用程序免受各类网络攻击、保障其安全运行的重要安全防护工具
 影响：常规Web安全测试手段会受到拦截  
-演示：IIS下免费D盾防护软件https://www.d99net.net/  
-### 模拟
+### 模拟实战
+IIS下免费D盾防护软件https://www.d99net.net/  
 Windows Server 2022 + IIS + D盾  
 尝试上传后门1.asp  
 打开后门时会被D盾防护阻止（安全测试手法会被拦截）  
@@ -220,4 +220,4 @@ server {
 }
 ```
 
-建议：手动在宝塔配置Nginx反向代理和负载均衡，练习一下
+<b>建议：手动在宝塔配置Nginx反向代理和负载均衡，练习一下</b>
