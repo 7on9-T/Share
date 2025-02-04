@@ -5,7 +5,7 @@ WAF：Web Application Firewall   Web应用防火墙
 ### 原理
 一种专门用于保护 Web 应用程序免受各类网络攻击、保障其安全运行的重要安全防护工具
 影响：常规Web安全测试手段会受到拦截  
-### 模拟实战
+### 演示
 IIS下免费D盾防护软件https://www.d99net.net/  
 Windows Server 2022 + IIS + D盾  
 尝试上传后门1.asp  
@@ -26,7 +26,7 @@ Windows Server 2022 + IIS + D盾
 >* 网站内置的WAF  
 >也叫自定义WAF。 直接镶嵌在代码中，即开发人员为了网站的安全，会在可能遭受攻击的地方增加一些安全防护代码，比如过滤敏感字符，对潜在的威胁字符进行编码、转义等。网站内置的WAF与业务更加契合。  
 
-#CDN: Content Delivery Network 内容分发服务
+CDN: Content Delivery Network 内容分发服务
 -
 ### 原理：
 旨在提高访问速度  
