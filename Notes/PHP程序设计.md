@@ -247,7 +247,24 @@ var_dump($_os);
 ?>
 ```
 ### Object（对象）
-暂时空着
+在PHP中，对象是一个抽象概念，它是一组属性和方法的集合。对象可以被创建、使用和销毁。对象是通过类来创建的，类是用来描述对象的属性和方法的模板。对象可以被赋值给变量，也可以作为函数的参数和返回值。
+```php
+<?php    
+class Person{
+    public $name;
+    public $age;
+    public function __construct($name,$age){
+        $this->name=$name;
+        $this->age=$age;
+    }
+    public function sayHello(){
+        echo "Hello, my name is ".$this->name." and I am ".$this->age." years old.";
+    }
+}
+$person1=new Person("John",25);
+$person1->sayHello();
+?>
+```
 ### NULL（空值）
 NULL表示变量无值，NULL是数据类型NULL唯一可能的值  
 提示：可以通过设置变量值为NULL来清空变量数据
@@ -260,4 +277,63 @@ var_dump( $xx );
 ?>
 ```
 ### Resource（资源类型）
-暂时空着
+在PHP中，资源（resource）是一种特殊的变量，它保存了对某个外部资源的引用。这些资源通常是通过与数据库、文件系统、图形库等交互的函数或方法创建的。资源不能直接转换为其他数据类型，也不能直接进行运算或比较。
+
+PHP中常见的资源类型包括：
+
+数据库连接：通过 mysqli_connect 或 PDO 等函数创建的数据库连接资源。
+文件句柄：通过 fopen 函数打开文件时返回的文件句柄资源。
+图像处理：通过 imagecreate 等GD库函数创建的图像资源。
+CURL会话：通过 curl_init 函数初始化的CURL会话资源。
+套接字：通过 socket_create 函数创建的套接字资源。
+日期时间：通过 date_create 函数创建的日期时间资源。
+XML解析器：通过 xml_parser_create 函数创建的XML解析器资源。
+资源通常需要显式地释放，以避免内存泄漏或其他资源管理问题。释放资源的函数通常以 close、free 或 destroy 结尾，例如 fclose 用于关闭文件句柄，mysqli_close 用于关闭数据库连接，xml_parser_free 用于释放XML解析器资源等。
+
+以下是一些资源操作的示例：
+// 打开文件
+$fileHandle = fopen("example.txt", "r");
+
+// 读取文件内容
+$content = fread($fileHandle, 1024);
+
+// 关闭文件
+fclose($fileHandle);
+
+// 创建数据库连接
+$connection = mysqli_connect("localhost", "user", "password", "database");
+
+// 查询数据库
+$result = mysqli_query($connection, "SELECT * FROM table");
+
+// 处理结果集
+while ($row = mysqli_fetch_assoc($result)) {
+    // 处理每一行数据
+}
+
+// 关闭数据库连接
+mysqli_close($connection);
+
+// 使用GD库创建图像
+$image = imagecreate(200, 200);
+
+// 释放图像资源
+imagedestroy($image);
+
+在这些示例中，$fileHandle 和 $connection 是资源类型的变量，使用完后需要通过相应的函数来释放它们。
+### 运算符
+PHP支持以下运算符：
+
+算术运算符：+、-、*、/、%、**
+赋值运算符：=、+=、-=、*=、/=、%=、**=
+比较运算符：==、!=、<>、<、>、<=、>=
+逻辑运算符：&&、||、!
+位运算符：&、|、^、~、<<、>>
+字符串运算符：.、.=、.（点）、[]、[]=
+其他运算符：isset()、unset()、empty()、eval()、include()、require()、print()、echo()、isset()、unset()、empty()、die()、exit()、@、list()、compact()、func_get_arg()、func_get_args()、func_num_args()、call_user_func()、call_user_func_array()、isset()、unset()、empty()、eval()、include()、require()、print()、echo()、isset()、unset()、empty()、die()、exit()、@、list()、compact()、func_get_arg()、func_get_args()、func_num_args()、call_user_func()、call_user_func_array()、isset()、unset()、empty()、eval()、include()、require()、print()、echo()、isset()、unset()、
+### 控制结构
+PHP支持以下控制结构：
+
+条件语句：if、elseif、else
+循环语句：for、foreach、while
+跳转语句：break、continue、goto
