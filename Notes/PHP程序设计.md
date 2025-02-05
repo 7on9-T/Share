@@ -337,3 +337,75 @@ PHP支持以下控制结构：
 条件语句：if、elseif、else
 循环语句：for、foreach、while
 跳转语句：break、continue、goto
+
+实战：blog编写
+-
+
+blog.php
+```html
+<?php
+$title = "江易北's blog";
+?>
+<!DOCTYPE html>
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title><?php echo "$title"; ?></title>
+    <style>
+
+    </style>
+</head>
+
+<body>
+    <div class="bar">
+        <a href="#home">Home</a>
+        <a href="#about">About</a>
+        <a href="#posts">Blog</a>
+        <a href="#contact">Contact Me</a>
+    </div>
+    <div class="container">
+        <h1 class="title">Welcome my blog.</h1>
+
+        <!-- 第一种写法：直接使用html编写 -->
+        <div class="text-area">
+            <span class="create-day">2024.09.08</span>
+            我来到了长春汽车职业技术大学。
+        </div>
+
+        <!-- 第二种写法：使用php变量，然后带到html中 -->
+        <?php
+        $date = "2024.09.12";
+        $content = "在学长的推荐下，我进入了网络安全社团。";
+        ?>
+        <div class="text-area">
+            <span class="create-day"><?php echo "$date"; ?></span>
+            <?php echo "$content"; ?>
+        </div>
+
+        <!-- 第三种写法：仍然使用php变量，不过使用php将html代码块包裹起来,并使用php EOF定界符 -->
+        <?php
+        $date = "2024.09.17";
+        $content = "那是第一次TA向我表白。";
+        echo '
+        <div class="text-area">
+            <span class="create-day">' . $date . '</span>
+            ' . $content . '
+        </div>
+        '; ?>
+
+        <!-- 第四种写法：仍然使用php变量，不过使用php将html代码块包裹起来,并使用转义符号 -->
+        <?php
+        $date = "2024.12.04";
+        $content = "我被确诊为中度抑郁，没机会了，一切都结束了。";
+        echo "
+        <div class=\"text-area\">
+            <span class=\"create-day\">$date</span>
+            $content
+        </div>
+        "; ?>
+    </div>
+</body>
+
+</html>
+```
