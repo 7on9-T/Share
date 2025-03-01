@@ -432,3 +432,10 @@ PPL保护主要应用于以下类型的进程：
 
 #结论
 PPL保护可以有效的防止恶意软件对关键进程的操作和篡改，提高系统的安全性。
+
+//参考资料
+- [什么是PPL保护？如何启用和配置PPL保护？微软官方文档](https://support.microsoft.com/zh-cn/help/4096474/what-is-protected-process-light-how-to-enable-and-configure-protected-process)
+- [Windows系统中常用的钩子函数](https://www.cnblogs.com/wupeiqi/p/10229992.html)
+- [OpenArk：Windows系统的PPL保护实践](https://www.freebuf.com/articles/system/249027.html)
+- [Windows系统的PPL保护实践](https://www.freebuf.com/articles/system/249027.html)
+
